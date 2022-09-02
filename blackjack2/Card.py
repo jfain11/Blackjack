@@ -1,3 +1,6 @@
+# Jacob Fain
+#
+
 class Card:
     _suit: str
     _value: int
