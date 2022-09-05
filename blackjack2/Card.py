@@ -1,5 +1,5 @@
 # Jacob Fain
-#
+# CS261
 
 class Card:
     _suit: str
