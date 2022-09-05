@@ -21,12 +21,14 @@ class Card:
 
     def cardValue(self) -> int:
         """
+        returns card value
         :return: the value of the card as an integer
         """
         pass
 
     def cardSuit(self) -> str:
         """
+        returns card suit
         :return: returns the suit of the card as a string. ex: "c"
         """
         pass

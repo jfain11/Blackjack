@@ -3,7 +3,7 @@ import Card
 class CardDeck:
     _cards: list
 
-    def __init__(self,):
+    def __init__(self):
         pass
 
     def freshDeck(self):
