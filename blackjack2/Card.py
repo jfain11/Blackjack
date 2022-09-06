@@ -46,7 +46,10 @@ class Card:
 
         :param value: int (0-51) or a str as described above
         """
-        pass
+        if isinstance(value, int):
+            self.cardNumber = value
+        elif isinstance(value, str):
+            pass
 
     def __str__(self) -> str:
         """
