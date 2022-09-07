@@ -66,6 +66,10 @@ class Card:
                 except:
                     raise InvalidCardError
                 self._cardNumber = faceIndex + (13 * suitIndex)
+            else:
+                first, second, third = value.split(" ")
+                first.capitlize()
+
 
 
     def __str__(self) -> str:

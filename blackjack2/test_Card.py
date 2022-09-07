@@ -9,28 +9,21 @@ from Card import *
 # ----------------------------------------------------------------------
 
 class CardTest(unittest.TestCase):
-
+    faceAbbreviations = ('a', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k')
+    suitLetters = ('c', 's', 'h', 'd')
     # ------------------------------------------------------------------
 
-    def testStrAce2(self):
-        c = Card("ac")
-        self.assertEqual(0, c._cardNumber, f"Card('ac') expected: 0, _cardNumber: {c._cardNumber}")
-        c = Card("as")
-        self.assertEqual(13, c._cardNumber, f"Card('as') expected: 13, _cardNumber: {c._cardNumber}")
-        c = Card("ah")
-        self.assertEqual(26, c._cardNumber, f"Card('ah') expected: 26, _cardNumber: {c._cardNumber}")
-        c = Card("ad")
-        self.assertEqual(39, c._cardNumber, f"Card('ad') expected: 39, _cardNumber: {c._cardNumber}")
 
-    def testStrJack2(self):
-        c = Card("jc")
-        self.assertEqual(10, c._cardNumber, f"Card('jc') expected: 10, _cardNumber: {c._cardNumber}")
-        c = Card("js")
-        self.assertEqual(23, c._cardNumber, f"Card('js') expected: 23, _cardNumber: {c._cardNumber}")
-        c = Card("jh")
-        self.assertEqual(36, c._cardNumber, f"Card('jh') expected: 36, _cardNumber: {c._cardNumber}")
-        c = Card("jd")
-        self.assertEqual(49, c._cardNumber, f"Card('jd') expected: 49, _cardNumber: {c._cardNumber}")
+    def testAllStr(self):
+        nums = [0, 13, 26, 39]
+        for i in range(len(self.faceAbbreviations)):
+            for x in range(len(self.suitLetters)):
+                result = self.faceAbbreviations[i] + self.suitLetters[x]
+                c = Card(result)
+                self.assertEqual(nums[x], c._cardNumber, f"Card({result}) expected: {nums[x]}, _cardNumber: {c._cardNumber}")
+                nums[x] += 1
+
+    # test capitalization
 
     def testInvalidIntRaises(self):
         with self.assertRaises(InvalidCardError):
