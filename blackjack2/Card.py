@@ -47,9 +47,26 @@ class Card:
         :param value: int (0-51) or a str as described above
         """
         if isinstance(value, int):
-            self.cardNumber = value
+            if value > 51:
+                raise InvalidCardError
+            elif value < 0:
+                raise InvalidCardError
+            else:
+                self.cardNumber = value
         elif isinstance(value, str):
-            pass
+
+            value.lower()
+
+            if len(value) <= 3:
+                face = str(value[:(len(value) - 1)])
+                suit = str(value[-1])
+                try:
+                    faceIndex = self.faceAbbreviations.index(face)
+                    suitIndex = self.suitLetters.index(suit)
+                except:
+                    raise InvalidCardError
+                self._cardNumber = faceIndex + (13 * suitIndex)
+
 
     def __str__(self) -> str:
         """
@@ -104,3 +121,4 @@ class Card:
             return 10
         else:
             return suitNum
+
