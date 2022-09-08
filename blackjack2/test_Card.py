@@ -11,10 +11,13 @@ from Card import *
 class CardTest(unittest.TestCase):
     faceAbbreviations = ('a', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k')
     suitLetters = ('c', 's', 'h', 'd')
+    faceNames = ("Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+                 "Jack", "Queen", "King")
+    suitNames = ("Clubs", "Spades", "Hearts", "Diamonds")
     # ------------------------------------------------------------------
 
 
-    def testAllStr(self):
+    def testAllShortStr(self):
         nums = [0, 13, 26, 39]
         for i in range(len(self.faceAbbreviations)):
             for x in range(len(self.suitLetters)):
@@ -23,7 +26,15 @@ class CardTest(unittest.TestCase):
                 self.assertEqual(nums[x], c._cardNumber, f"Card({result}) expected: {nums[x]}, _cardNumber: {c._cardNumber}")
                 nums[x] += 1
 
-    # test capitalization
+    def testAllLongStr(self):
+        nums = [0, 13, 26, 39]
+        for i in range(len(self.faceNames)):
+            for x in range(len(self.suitNames)):
+                result = self.faceNames[i] + " of " + self.suitNames[x]
+                c = Card(result)
+                self.assertEqual(nums[x], c._cardNumber, f"Card({result}) expected: {nums[x]}, _cardNumber: {c._cardNumber}")
+                nums[x] += 1
+
 
     def testInvalidIntRaises(self):
         with self.assertRaises(InvalidCardError):

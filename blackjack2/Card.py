@@ -67,8 +67,17 @@ class Card:
                     raise InvalidCardError
                 self._cardNumber = faceIndex + (13 * suitIndex)
             else:
-                first, second, third = value.split(" ")
-                first.capitlize()
+                words = value.split(" ")
+                face = words[0].capitalize()
+                suit = words[2].capitalize()
+                try:
+                    faceIndex = self.faceNames.index(face)
+                    suitIndex = self.suitNames.index(suit)
+                except:
+                    raise InvalidCardError
+                self._cardNumber = faceIndex + (13 * suitIndex)
+
+
 
 
 
