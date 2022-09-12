@@ -46,6 +46,8 @@ class Card:
 
         :param value: int (0-51) or a str as described above
         """
+
+        # if the value is an integer
         if isinstance(value, int):
             if value > 51:
                 raise InvalidCardError
@@ -53,28 +55,44 @@ class Card:
                 raise InvalidCardError
             else:
                 self.cardNumber = value
-        elif isinstance(value, str):
 
+        # if the value is a string
+        elif isinstance(value, str):
             value.lower()
 
+            # if the string is 3 characters or fewer. ex: "ac", "4s", "10d"
             if len(value) <= 3:
+
+                # extract the face and the suit from the string
                 face = str(value[:(len(value) - 1)])
                 suit = str(value[-1])
+
+                # try to find the index of the face and suit in the corresponding stored list
                 try:
                     faceIndex = self.faceAbbreviations.index(face)
                     suitIndex = self.suitLetters.index(suit)
+
+                # if an index of either cannot be found then raises InvalidCardError
                 except:
                     raise InvalidCardError
+
+                # uses the indexes to set the instance variable _cardNumber to the correct integer
                 self._cardNumber = faceIndex + (13 * suitIndex)
             else:
                 words = value.split(" ")
                 face = words[0].capitalize()
                 suit = words[2].capitalize()
+
+                # try to find the index of the face and suit in the corresponding stored list
                 try:
                     faceIndex = self.faceNames.index(face)
                     suitIndex = self.suitNames.index(suit)
+
+                # if an index of either cannot be found then raises InvalidCardError
                 except:
                     raise InvalidCardError
+
+                # uses the indexes to set the instance variable _cardNumber to the correct integer
                 self._cardNumber = faceIndex + (13 * suitIndex)
 
 
