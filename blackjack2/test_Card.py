@@ -16,6 +16,10 @@ class CardTest(unittest.TestCase):
     suitNames = ("Clubs", "Spades", "Hearts", "Diamonds")
     # ------------------------------------------------------------------
 
+    def testAllInts(self):
+        for i in range(52):
+            c = Card(i)
+            self.assertEqual(i, c._cardNumber, f"Card({i}) expected: {i}, _cardNumber: {c._cardNumber}" )
 
     def testAllShortStr(self):
         nums = [0, 13, 26, 39]

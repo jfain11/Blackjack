@@ -54,7 +54,7 @@ class Card:
             elif value < 0:
                 raise InvalidCardError
             else:
-                self.cardNumber = value
+                self._cardNumber = value
 
         # if the value is a string
         elif isinstance(value, str):
