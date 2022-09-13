@@ -53,9 +53,9 @@ class Card:
         # if the value is an integer
         if isinstance(value, int):
             if value > 51:
-                raise InvalidCardError
+                raise InvalidCardError(f"invalid int for Card initialization (must be 0 to 51): {value}")
             elif value < 0:
-                raise InvalidCardError
+                raise InvalidCardError(f"invalid int for Card initialization (must be 0 to 51): {value}")
             else:
                 self._cardNumber = value
 
@@ -77,7 +77,7 @@ class Card:
 
                 # if an index of either cannot be found then raises InvalidCardError
                 except:
-                    raise InvalidCardError
+                    raise InvalidCardError(f"invalid str for Card initialization (correct examples: ac, Ace of Clubs): {value}")
 
                 # uses the indexes to set the instance variable _cardNumber to the correct integer
                 self._cardNumber = faceIndex + (13 * suitIndex)
@@ -99,7 +99,7 @@ class Card:
 
                 # if an index of either cannot be found then raises InvalidCardError
                 except:
-                    raise InvalidCardError
+                    raise InvalidCardError(f"invalid str for Card initialization (correct examples: ac, Ace of Clubs): {value}")
 
                 # uses the indexes to set the instance variable _cardNumber to the correct integer
                 self._cardNumber = faceIndex + (13 * suitIndex)
