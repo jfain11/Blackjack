@@ -19,18 +19,18 @@ class CardTest(unittest.TestCase):
 
     def testAllShortStr(self):
         nums = [0, 13, 26, 39]
-        for i in range(len(self.faceAbbreviations)):
-            for x in range(len(self.suitLetters)):
-                result = self.faceAbbreviations[i] + self.suitLetters[x]
+        for i in range(len(Card.faceAbbreviations)):
+            for x in range(len(Card.suitLetters)):
+                result = Card.faceAbbreviations[i] + Card.suitLetters[x]
                 c = Card(result)
                 self.assertEqual(nums[x], c._cardNumber, f"Card({result}) expected: {nums[x]}, _cardNumber: {c._cardNumber}")
                 nums[x] += 1
 
     def testAllLongStr(self):
         nums = [0, 13, 26, 39]
-        for i in range(len(self.faceNames)):
-            for x in range(len(self.suitNames)):
-                result = self.faceNames[i] + " of " + self.suitNames[x]
+        for i in range(len(Card.faceNames)):
+            for x in range(len(Card.suitNames)):
+                result = Card.faceNames[i] + " of " + Card.suitNames[x]
                 c = Card(result)
                 self.assertEqual(nums[x], c._cardNumber, f"Card({result}) expected: {nums[x]}, _cardNumber: {c._cardNumber}")
                 nums[x] += 1

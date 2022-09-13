@@ -58,7 +58,7 @@ class Card:
 
         # if the value is a string
         elif isinstance(value, str):
-            value.lower()
+            value = value.lower()
 
             # if the string is 3 characters or fewer. ex: "ac", "4s", "10d"
             if len(value) <= 3:
@@ -66,11 +66,11 @@ class Card:
                 # extract the face and the suit from the string
                 face = str(value[:(len(value) - 1)])
                 suit = str(value[-1])
-
+                
                 # try to find the index of the face and suit in the corresponding stored list
                 try:
-                    faceIndex = self.faceAbbreviations.index(face)
-                    suitIndex = self.suitLetters.index(suit)
+                    faceIndex = Card.faceAbbreviations.index(face)
+                    suitIndex = Card.suitLetters.index(suit)
 
                 # if an index of either cannot be found then raises InvalidCardError
                 except:
@@ -85,8 +85,8 @@ class Card:
 
                 # try to find the index of the face and suit in the corresponding stored list
                 try:
-                    faceIndex = self.faceNames.index(face)
-                    suitIndex = self.suitNames.index(suit)
+                    faceIndex = Card.faceNames.index(face)
+                    suitIndex = Card.suitNames.index(suit)
 
                 # if an index of either cannot be found then raises InvalidCardError
                 except:
