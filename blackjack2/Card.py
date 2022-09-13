@@ -1,3 +1,6 @@
+# Jacob Fain
+# CS261
+
 # custom Exception to raise if Card constructor is passed invalid data
 class InvalidCardError(Exception):
     pass
@@ -78,13 +81,19 @@ class Card:
 
                 # uses the indexes to set the instance variable _cardNumber to the correct integer
                 self._cardNumber = faceIndex + (13 * suitIndex)
+
+           # if the string is longer than 3 characters
             else:
-                words = value.split(" ")
-                face = words[0].capitalize()
-                suit = words[2].capitalize()
 
                 # try to find the index of the face and suit in the corresponding stored list
                 try:
+
+                    # splits the string into three words
+                    words = value.split(" ")
+
+                    face = words[0].capitalize()
+                    suit = words[2].capitalize()
+
                     faceIndex = Card.faceNames.index(face)
                     suitIndex = Card.suitNames.index(suit)
 
@@ -96,30 +105,39 @@ class Card:
                 self._cardNumber = faceIndex + (13 * suitIndex)
 
 
-
-
-
     def __str__(self) -> str:
         """
         :return: name of card using faceNames and suitNames (e.g., "Ten of Clubs")
         """
-        faceIndex = self.cardNumber % 13
-        suitIndex = self.cardNumber // 13
+
+        # retrieves the index of the face and suit
+        faceIndex = self._cardNumber % 13
+        suitIndex = self._cardNumber // 13
+
         return f"{Card.faceNames[faceIndex]} of {Card.suitNames[suitIndex]}"
+
 
     def faceName(self) -> str:
         """
         :return: face name for card using faceNames (e.g., "Ten")
         """
-        faceIndex = self.cardNumber % 13
+
+        # retrieves the index of the face
+        faceIndex = self._cardNumber % 13
+
         return f"{Card.faceNames[faceIndex]}"
+
 
     def suitName(self) -> str:
         """
         :return: suit name for card using suitNames (e.g., "Clubs")
         """
-        suitIndex = self.cardNumber // 13
+
+        # retrieves the index of the suit
+        suitIndex = self._cardNumber // 13
+
         return f"{Card.suitNames[suitIndex]}"
+
 
     def filename(self) -> str:
         """
@@ -132,11 +150,16 @@ class Card:
 
             "03c.gif" (for three of clubs)
         """
-        suitNum = self.cardNumber // 13
-        faceNum = self.cardNumber % 13
-        suits = 'cshd'
-        filename = f"{faceNum + 1:>02}{suits[suitNum]}.gif"
+
+        # retrieves the index of the face and suit
+        suitNum = self._cardNumber // 13
+        faceNum = self._cardNumber % 13
+
+        # creates a string with the correct filename
+        filename = f"{faceNum + 1:>02}{Card.suitLetters[suitNum]}.gif"
+
         return filename
+
 
     def blackjackValue(self) -> int:
         """
@@ -145,11 +168,15 @@ class Card:
         for jack, queen, king, return 10
         for all other face values, return the corresponding integer value
         """
-        suitNum = self.cardNumber // 13
-        if suitNum == 0:
+
+        # retrieves the face value
+        faceNum = self._cardNumber % 13
+        # if it is an ace
+        if faceNum == 0:
             return 11
-        elif suitNum > 9:
+        # if it is jack, queen, or king
+        elif faceNum > 9:
             return 10
         else:
-            return suitNum
+            return faceNum + 1
 
