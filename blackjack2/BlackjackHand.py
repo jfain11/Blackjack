@@ -62,7 +62,7 @@ class BlackjackHand:
         pass
 
 
-    def __lt__(self, other : Card) -> bool:
+    def __lt__(self, other: Card) -> bool:
         """
         compares if one blackjackHand object's score is less than another blackjackHand object's score
         :param other: a different blackjackHand object
