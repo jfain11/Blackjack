@@ -1,3 +1,6 @@
+# Jacob Fain
+# CS261
+
 import Card
 
 class BlackjackHand:
