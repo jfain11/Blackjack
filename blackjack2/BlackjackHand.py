@@ -1,76 +1,158 @@
-# Jacob Fain
-# CS261
+from __future__ import annotations
 
-import Card
+from Card import Card
 
 class BlackjackHand:
-    _score: int
-    _hand: list
+    # name for the hand
+    _name: str
 
-    def __init__(self):
-        pass
+    # value at which the hand stops getting cards
+    _stayValue: int
 
-    def __updateScore(self):
+    # list of cards
+    _cards = list[Card]
+
+    # ------------------------------------------------------------------
+
+    def __init__(self, name: str = "", stayValue: int = 21):
         """
-        calculates the total score of the cards within the hand and updates the instance variable _score
-        is called whenever a new card is inserted
+        :param name: a name for the hand
+        :param stayValue: values below stayValue have canGetCard return True
+        """
+        self._name = name
+        self._stayValue = stayValue
+        self._cards = []
+
+    def reset(self) -> None:
+        """
+        resets state to an empty hand
         :return: None
         """
-        pass
+        self._cards = []
 
-    def insertCard(self, card: Card):
+    def canGetCard(self) -> bool:
         """
-        inserts a card into the hand
-        :param card: the card to insert into the hand
+        :return: True if total < the stay value, False otherwise
+        """
+        if self.score() < self._stayValue:
+            return True
+        return False
+
+
+    def addCard(self, card: Card) -> None:
+        """
+        adds card to the hand
+        :param card: Card to add
         :return: None
         """
-        pass
-
-    def clearHand(self):
-        """
-        removes all the cards from the hand
-        :return: None
-        """
-        pass
+        self._cards.append(card)
 
     def score(self) -> int:
         """
-        :return: the combined blackjack score of all the cards in the hand
+        :return: total value of the hand
+        """
+        score = 0
+        for c in self._cards:
+            value = c.blackjackValue()
+            if value == 11:
+                if score + value > 21:
+                    score += 1
+                else:
+                    score += value
+            else:
+                score += value
+
+        return score
+
+
+
+
+    def busted(self) -> bool:
+        """
+        :return: True if hand total > 21, False otherwise
+        """
+        if self.score() > 21:
+            return True
+        return False
+
+
+    def __str__(self) -> str:
+        """
+        if the player has a name (_name is not the empty string), the return string contains
+        the player's name followed by a colon followed by a space and then the score
+        if the player has busted, the string "busted" is used instead of the numeric score
+        examples:
+        if _name is empty and _total is 12, it just returns "12"
+        if _name is empty and the player has busted, it just returns "busted"
+        if _name is "Player 1" and _total is 12, it returns "Player 1: 12"
+        if _name is "Player 1" and the player has busted, it returns "Player 1: busted"
+        :return: string as described above
         """
         pass
 
-    def __len__(self) -> int:
+    # ------------------------------------------------------------------
+
+    def __lt__(self, other: BlackjackHand) -> bool:
         """
-        :return: the length of the hand (number of cards in the hand)
+        :param other: BlackjackHand to compare
+        :return: True if other beats self, otherwise False
+        """
+        if self == other:
+            return False
+        elif self.busted():
+            return True
+        elif self.score() < other.score():
+            return True
+        return False
+
+
+    def __eq__(self, other: BlackjackHand) -> bool:
+        """
+        :param other: BlackjackHand to compare
+        :return: True if both hands the same (a tie), False otherwise
+        """
+        if self.busted() or other.busted():
+            if self.busted() and other.busted():
+                return True
+            return False
+
+        if self.score() == other.score():
+            return True
+        return False
+
+
+
+
+    def __ne__(self, other: BlackjackHand) -> bool:
+        """
+        :param other: BlackjackHand to compare
+        :return: True if one hand beats the other, False otherwise
+        """
+        if self == other:
+            return False
+        else:
+            return True
+
+    def __le__(self, other: BlackjackHand) -> bool:
+        """
+        :param other: BlackjackHand to compare
+        :return: True if other beats self or a tie, False otherwise
         """
         pass
 
-    def __eq__(self, other: Card) -> bool:
+    def __gt__(self, other: BlackjackHand) -> bool:
         """
-        compares if the blackjack score of two blackjackHand objects is equal
-        :param other: a different blackjackHand object
-        :return: true if they are equal and false if not
-        """
-        pass
-
-    def __gt__(self, other: Card) -> bool:
-        """
-        compares if one blackjackHand object's score is greater than another blackjackHand object's score
-        :param other: a different blackjackHand object
-        :return:
+        :param other: BlackjackHand to compare
+        :return: True if self beats other, False otherwise
         """
         pass
 
-
-    def __lt__(self, other: Card) -> bool:
+    def __ge__(self, other: BlackjackHand) -> bool:
         """
-        compares if one blackjackHand object's score is less than another blackjackHand object's score
-        :param other: a different blackjackHand object
-        :return:
+        :param other: BlackjackHand to compare
+        :return: True if self beats other or a tie, False otherwise
         """
         pass
 
+# ----------------------------------------------------------------------
 
-
-
-    

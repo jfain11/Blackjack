@@ -1,5 +1,13 @@
-# Jacob Fain
-# CS261
+#!/usr/bin/env python3
+
+# ----------------------------------------------------------------------
+# Card.py
+# Dave Reed
+# 04/09/2022
+# ----------------------------------------------------------------------
+
+from __future__ import annotations
+
 
 # custom Exception to raise if Card constructor is passed invalid data
 class InvalidCardError(Exception):
@@ -8,6 +16,7 @@ class InvalidCardError(Exception):
 # ----------------------------------------------------------------------
 
 class Card:
+
     """
     stores a card from a standard playing card deck of 52 cards
     """
@@ -20,7 +29,7 @@ class Card:
 
     # full name of each face
     faceNames = ("Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
-                 "Jack", "Queen", "King")
+                  "Jack", "Queen", "King")
 
     # full name of each suit
     suitNames = ("Clubs", "Spades", "Hearts", "Diamonds")
@@ -49,95 +58,84 @@ class Card:
 
         :param value: int (0-51) or a str as described above
         """
-
-        # if the value is an integer
         if isinstance(value, int):
-            if value > 51:
+            if value < 0 or value > 51:
                 raise InvalidCardError(f"invalid int for Card initialization (must be 0 to 51): {value}")
-            elif value < 0:
-                raise InvalidCardError(f"invalid int for Card initialization (must be 0 to 51): {value}")
-            else:
-                self._cardNumber = value
+            self._cardNumber = value
 
-        # if the value is a string
         elif isinstance(value, str):
-            value = value.lower()
-
-            # if the string is 3 characters or fewer. ex: "ac", "4s", "10d"
+            value = value.strip()
+            # version that is 2 or 3 characters such as ad or 10c
             if len(value) <= 3:
+                # suit is last character
+                suit = value[-1].lower()
+                # face is everything except last character (first character or first two characters)
+                face = value[:-1].lower()
 
-                # extract the face and the suit from the string
-                face = str(value[:(len(value) - 1)])
-                suit = str(value[-1])
-                
-                # try to find the index of the face and suit in the corresponding stored list
+                # get indices from class variables
                 try:
-                    faceIndex = Card.faceAbbreviations.index(face)
-                    suitIndex = Card.suitLetters.index(suit)
+                    suitNumber = Card.suitLetters.index(suit)
+                    faceNumber = Card.faceAbbreviations.index(face)
+                # raise error if failed
+                except ValueError:
+                    raise InvalidCardError(f'invalid string for Card initialization: "{value}"') from None
 
-                # if an index of either cannot be found then raises InvalidCardError
-                except:
-                    raise InvalidCardError(f"invalid str for Card initialization (correct examples: ac, Ace of Clubs): {value}")
-
-                # uses the indexes to set the instance variable _cardNumber to the correct integer
-                self._cardNumber = faceIndex + (13 * suitIndex)
-
-           # if the string is longer than 3 characters
+            # longer str that should be of form "Ace of Clubs"
             else:
-
-                # try to find the index of the face and suit in the corresponding stored list
+                # break into list such as ["Ace", "of", "Clubs"]
+                s = value.split()
                 try:
+                    # convert to lower case and then capitalize first letter
+                    face = s[0].lower().capitalize()
+                    suit = s[2].lower().capitalize()
+                    # get indices from class variables
+                    suitNumber = Card.suitNames.index(suit)
+                    faceNumber = Card.faceNames.index(face)
+                # raise error if failed
+                except (ValueError, IndexError):
+                    raise InvalidCardError(f'invalid string for Card initialization: "{value}"') from None
 
-                    # splits the string into three words
-                    words = value.split(" ")
+            # 13 cards per suit and then offset for face
+            self._cardNumber = suitNumber * 13 + faceNumber
 
-                    face = words[0].capitalize()
-                    suit = words[2].capitalize()
-
-                    faceIndex = Card.faceNames.index(face)
-                    suitIndex = Card.suitNames.index(suit)
-
-                # if an index of either cannot be found then raises InvalidCardError
-                except:
-                    raise InvalidCardError(f"invalid str for Card initialization (correct examples: ac, Ace of Clubs): {value}")
-
-                # uses the indexes to set the instance variable _cardNumber to the correct integer
-                self._cardNumber = faceIndex + (13 * suitIndex)
-
+        else:
+            raise InvalidCardError("invalid type: must pass int or str")
 
     def __str__(self) -> str:
         """
         :return: name of card using faceNames and suitNames (e.g., "Ten of Clubs")
         """
+        return f"{self.faceName()} of {self.suitName()}"
 
-        # retrieves the index of the face and suit
-        faceIndex = self._cardNumber % 13
-        suitIndex = self._cardNumber // 13
+    def __eq__(self, other: Card) -> bool:
+        """
+        :param other: Card to compare
+        :return: True if both cards are the same, False otherwise
+        """
+        return self._cardNumber == other._cardNumber
 
-        return f"{Card.faceNames[faceIndex]} of {Card.suitNames[suitIndex]}"
-
+    def __ne__(self, other: Card) -> bool:
+        """
+        :param other: Card to compare
+        :return: True if both cards are not the same, False otherwise
+        """
+        return self._cardNumber != other._cardNumber
 
     def faceName(self) -> str:
         """
         :return: face name for card using faceNames (e.g., "Ten")
         """
-
-        # retrieves the index of the face
-        faceIndex = self._cardNumber % 13
-
-        return f"{Card.faceNames[faceIndex]}"
-
+        # 13 cards per suit so get face offset
+        faceNum = self._cardNumber % 13
+        return f"{Card.faceNames[faceNum]}"
 
     def suitName(self) -> str:
         """
         :return: suit name for card using suitNames (e.g., "Clubs")
         """
-
-        # retrieves the index of the suit
-        suitIndex = self._cardNumber // 13
-
-        return f"{Card.suitNames[suitIndex]}"
-
+        # 13 cards per suit
+        suitNum = self._cardNumber // 13
+        return f"{Card.suitNames[suitNum]}"
 
     def filename(self) -> str:
         """
@@ -147,19 +145,16 @@ class Card:
             where ## is a two-digit number (leading 0 if less than 10)
             and s is a letter corresponding to the suit value
             c for clubs, s for spades, h for hearts, d for diamonds
-
+            "01c.gif" (for ace of clubs)
+            "02c.gif" (for two of clubs)
             "03c.gif" (for three of clubs)
+            and so on
         """
 
-        # retrieves the index of the face and suit
-        suitNum = self._cardNumber // 13
         faceNum = self._cardNumber % 13
-
-        # creates a string with the correct filename
-        filename = f"{faceNum + 1:>02}{Card.suitLetters[suitNum]}.gif"
-
-        return filename
-
+        suitNum = self._cardNumber // 13
+        # right justify faceNum+1 in two spaces with leading zero, followed by suit letter and .gif
+        return f"{faceNum+1:0>2}{Card.suitLetters[suitNum]}.gif"
 
     def blackjackValue(self) -> int:
         """
@@ -168,15 +163,16 @@ class Card:
         for jack, queen, king, return 10
         for all other face values, return the corresponding integer value
         """
+        # face value from 1 to 13
+        value = self._cardNumber % 13 + 1
+        # 1 is ace
+        if value == 1:
+            value = 11
+        # anything more than 10, is jack, queen, or king so those are worth 10
+        elif value > 10:
+            value = 10
+        return value
 
-        # retrieves the face value
-        faceNum = self._cardNumber % 13
-        # if it is an ace
-        if faceNum == 0:
-            return 11
-        # if it is jack, queen, or king
-        elif faceNum > 9:
-            return 10
-        else:
-            return faceNum + 1
+# ----------------------------------------------------------------------
+
 
