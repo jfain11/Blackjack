@@ -8,6 +8,7 @@ import unittest
 
 sys.path.insert(0, '..')
 from Card import *
+from BlackjackHand import *
 
 # ----------------------------------------------------------------------
 
@@ -17,9 +18,17 @@ class BlackjackHandTest(unittest.TestCase):
 
     # tests the constructor for every integer in range 0-51
     def testHand(self):
-        for i in range(52):
-            c = Card(i)
-            self.assertEqual(i, c._cardNumber, f"Card({i}) expected: {i}, _cardNumber: {c._cardNumber}" )
+        hand = BlackjackHand("jacob")
+        print(hand.score())
+        hand.addCard(Card("4c"))
+        print(hand.score())
+        hand.addCard(Card("ac"))
+        print(hand.score())
+        hand.addCard(Card("6c"))
+        print(hand.score())
+        hand.addCard(Card("ac"))
+        print(hand.score())
+
 
 
 # ----------------------------------------------------------------------

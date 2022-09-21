@@ -88,7 +88,10 @@ class BlackjackHand:
         if _name is "Player 1" and the player has busted, it returns "Player 1: busted"
         :return: string as described above
         """
-        pass
+        if self._name == "":
+            pass
+        else:
+            pass
 
     # ------------------------------------------------------------------
 
@@ -121,8 +124,6 @@ class BlackjackHand:
         return False
 
 
-
-
     def __ne__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
@@ -138,21 +139,35 @@ class BlackjackHand:
         :param other: BlackjackHand to compare
         :return: True if other beats self or a tie, False otherwise
         """
-        pass
+        if self == other:
+            return True
+        elif self < other:
+            return True
+        else:
+            return False
+
 
     def __gt__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if self beats other, False otherwise
         """
-        pass
+        if other < self:
+            return True
+        else:
+            return False
 
     def __ge__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if self beats other or a tie, False otherwise
         """
-        pass
+        if self == other:
+            return True
+        elif self > other:
+            return True
+        else:
+            return False
 
 # ----------------------------------------------------------------------
 
