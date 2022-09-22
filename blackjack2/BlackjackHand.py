@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from Card import Card
-
+from typing import List
 class BlackjackHand:
     # name for the hand
     _name: str
@@ -10,7 +10,8 @@ class BlackjackHand:
     _stayValue: int
 
     # list of cards
-    _cards = list[Card]
+    _cards: List[Card]
+
 
     # ------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ class BlackjackHand:
         :param name: a name for the hand
         :param stayValue: values below stayValue have canGetCard return True
         """
+        # initializes the instance variables
         self._name = name
         self._stayValue = stayValue
         self._cards = []
@@ -28,15 +30,16 @@ class BlackjackHand:
         resets state to an empty hand
         :return: None
         """
+        # sets _cards to an empty list
         self._cards = []
 
     def canGetCard(self) -> bool:
         """
         :return: True if total < the stay value, False otherwise
         """
-        if self.score() < self._stayValue:
-            return True
-        return False
+        # if score is less than stay value returns True
+
+        return self.score() < self._stayValue
 
 
     def addCard(self, card: Card) -> None:
@@ -45,6 +48,7 @@ class BlackjackHand:
         :param card: Card to add
         :return: None
         """
+        # appends the new card onto the end of _cards
         self._cards.append(card)
 
     def score(self) -> int:
@@ -63,8 +67,6 @@ class BlackjackHand:
                 score += value
 
         return score
-
-
 
 
     def busted(self) -> bool:
@@ -104,9 +106,8 @@ class BlackjackHand:
             return False
         elif self.busted():
             return True
-        elif self.score() < other.score():
-            return True
-        return False
+        return self.score() < other.score()
+
 
 
     def __eq__(self, other: BlackjackHand) -> bool:
@@ -115,13 +116,10 @@ class BlackjackHand:
         :return: True if both hands the same (a tie), False otherwise
         """
         if self.busted() or other.busted():
-            if self.busted() and other.busted():
-                return True
-            return False
+            return self.busted() and other.busted()
 
-        if self.score() == other.score():
-            return True
-        return False
+        return self.score() == other.score()
+
 
 
     def __ne__(self, other: BlackjackHand) -> bool:
@@ -141,10 +139,8 @@ class BlackjackHand:
         """
         if self == other:
             return True
-        elif self < other:
-            return True
-        else:
-            return False
+        return self < other
+
 
 
     def __gt__(self, other: BlackjackHand) -> bool:
@@ -152,10 +148,9 @@ class BlackjackHand:
         :param other: BlackjackHand to compare
         :return: True if self beats other, False otherwise
         """
-        if other < self:
-            return True
-        else:
-            return False
+
+        return other < self
+
 
     def __ge__(self, other: BlackjackHand) -> bool:
         """
@@ -164,10 +159,7 @@ class BlackjackHand:
         """
         if self == other:
             return True
-        elif self > other:
-            return True
-        else:
-            return False
+        return self > other
 
 # ----------------------------------------------------------------------
 
