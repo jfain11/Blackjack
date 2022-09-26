@@ -88,25 +88,150 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertFalse(h1 < h2)
 
-
     def testEQ(self):
-        pass
+        h1 = BlackjackHand()
+        h2 = BlackjackHand()
+
+        # equal score
+        h1.addCard(Card("4c"))
+        h2.addCard(Card("4c"))
+        self.assertTrue(h1 == h2)
+
+        # h1 < h2
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("3c"))
+        self.assertFalse(h1 == h2)
+
+        # h1 > h2
+        h1.addCard(Card("9c"))
+        h2.addCard(Card("7c"))
+        self.assertFalse(h1 == h2)
+
+        # h2 busts
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("kc"))
+        self.assertFalse(h1 == h2)
+
+        # both bust
+        h1.addCard(Card("kc"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 == h2)
 
     def testNE(self):
-        pass
+        h1 = BlackjackHand()
+        h2 = BlackjackHand()
+
+        # equal score
+        h1.addCard(Card("4c"))
+        h2.addCard(Card("4c"))
+        self.assertFalse(h1 != h2)
+
+        # h1 < h2
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("3c"))
+        self.assertTrue(h1 != h2)
+
+        # h1 > h2
+        h1.addCard(Card("9c"))
+        h2.addCard(Card("7c"))
+        self.assertTrue(h1 != h2)
+
+        # h2 busts
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 != h2)
+
+        # both bust
+        h1.addCard(Card("kc"))
+        h2.addCard(Card("kc"))
+        self.assertFalse(h1 != h2)
 
     def testLE(self):
-        pass
+        h1 = BlackjackHand()
+        h2 = BlackjackHand()
+
+        # equal score
+        h1.addCard(Card("4c"))
+        h2.addCard(Card("4c"))
+        self.assertTrue(h1 <= h2)
+
+        # h1 < h2
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("3c"))
+        self.assertTrue(h1 <= h2)
+
+        # h1 > h2
+        h1.addCard(Card("9c"))
+        h2.addCard(Card("7c"))
+        self.assertFalse(h1 <= h2)
+
+        # h2 busts
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 <= h2)
+
+        # both bust
+        h1.addCard(Card("kc"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 <= h2)
 
     def testGT(self):
-        pass
+        h1 = BlackjackHand()
+        h2 = BlackjackHand()
+
+        # equal score
+        h1.addCard(Card("4c"))
+        h2.addCard(Card("4c"))
+        self.assertFalse(h1 > h2)
+
+        # h1 < h2
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("3c"))
+        self.assertFalse(h1 > h2)
+
+        # h1 > h2
+        h1.addCard(Card("9c"))
+        h2.addCard(Card("7c"))
+        self.assertTrue(h1 > h2)
+
+        # h2 busts
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 > h2)
+
+        # both bust
+        h1.addCard(Card("kc"))
+        h2.addCard(Card("kc"))
+        self.assertFalse(h1 > h2)
 
     def testGE(self):
-        pass
+        h1 = BlackjackHand()
+        h2 = BlackjackHand()
 
+        # equal score
+        h1.addCard(Card("4c"))
+        h2.addCard(Card("4c"))
+        self.assertTrue(h1 >= h2)
 
+        # h1 < h2
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("3c"))
+        self.assertFalse(h1 >= h2)
 
+        # h1 > h2
+        h1.addCard(Card("9c"))
+        h2.addCard(Card("7c"))
+        self.assertTrue(h1 >= h2)
 
+        # h2 busts
+        h1.addCard(Card("2c"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 >= h2)
+
+        # both bust
+        h1.addCard(Card("kc"))
+        h2.addCard(Card("kc"))
+        self.assertTrue(h1 >= h2)
 
 
 # ----------------------------------------------------------------------
