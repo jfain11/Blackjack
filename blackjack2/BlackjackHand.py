@@ -1,8 +1,12 @@
-from __future__ import annotations
+# Jacob Fain
+# CS261
 
+from __future__ import annotations
 from Card import Card
 from typing import List
+
 class BlackjackHand:
+
     # name for the hand
     _name: str
 
@@ -11,7 +15,6 @@ class BlackjackHand:
 
     # list of cards
     _cards: List[Card]
-
 
     # ------------------------------------------------------------------
 
@@ -38,9 +41,7 @@ class BlackjackHand:
         :return: True if total < the stay value, False otherwise
         """
         # if score is less than stay value returns True
-
         return self.score() < self._stayValue
-
 
     def addCard(self, card: Card) -> None:
         """
@@ -55,28 +56,43 @@ class BlackjackHand:
         """
         :return: total value of the hand
         """
+        # initializes accumulators
+        aceCount = 0
         score = 0
+
+        # loops through the hand and totals the score
+        # counts the number of aces in the hand
         for c in self._cards:
             value = c.blackjackValue()
+
+            # counts the aces in the hand
             if value == 11:
-                if score + value > 21:
-                    score += 1
-                else:
-                    score += value
-            else:
-                score += value
+                aceCount += 1
 
+            # totals the score of all the cards
+            score += value
+
+        # adjusts the score of the aces if the score is greater than 21
+        if score > 21:
+            for i in range(aceCount):
+                score -= 10
+                if score < 22:
+                    break
+
+        # returns the total blackjack score of the hand
         return score
-
 
     def busted(self) -> bool:
         """
         :return: True if hand total > 21, False otherwise
         """
+        # if score is greater than 21 then return True
         if self.score() > 21:
             return True
         return False
 
+    # ------------------------------------------------------------------
+    # overloaded operators
 
     def __str__(self) -> str:
         """
@@ -90,12 +106,23 @@ class BlackjackHand:
         if _name is "Player 1" and the player has busted, it returns "Player 1: busted"
         :return: string as described above
         """
-        if self._name == "":
-            pass
-        else:
-            pass
 
-    # ------------------------------------------------------------------
+        if self._name == "":
+
+            # if busted with no name
+            if self.busted():
+                return "busted"
+            # if not busted with no name
+            else:
+                return str(self.score())
+
+        else:
+            # if busted with a name
+            if self.busted():
+                return f"{self._name}: busted"
+            # if not busted with a name
+            else:
+                return f"{self._name}: {self.score()}"
 
     def __lt__(self, other: BlackjackHand) -> bool:
         """
@@ -108,8 +135,6 @@ class BlackjackHand:
             return True
         return self.score() < other.score()
 
-
-
     def __eq__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
@@ -119,8 +144,6 @@ class BlackjackHand:
             return self.busted() and other.busted()
 
         return self.score() == other.score()
-
-
 
     def __ne__(self, other: BlackjackHand) -> bool:
         """
@@ -141,8 +164,6 @@ class BlackjackHand:
             return True
         return self < other
 
-
-
     def __gt__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
@@ -150,7 +171,6 @@ class BlackjackHand:
         """
 
         return other < self
-
 
     def __ge__(self, other: BlackjackHand) -> bool:
         """

@@ -16,49 +16,130 @@ class BlackjackHandTest(unittest.TestCase):
 
     # ------------------------------------------------------------------
 
-    # tests the constructor for every integer in range 0-51
-
-    def testInit(self):
-        h = BlackjackHand()
-        self.assertEqual(h.score(), 0)
-
+    # tests the reset() method of the BlackjackHand class
     def testReset(self):
-        pass
+        h = BlackjackHand()
+        h.reset()
+        self.assertEqual(0, h.score())
 
+        h.addCard(Card("7h"))
+        h.reset()
+        self.assertEqual(0, h.score())
+
+        h.addCard(Card("7h"))
+        h.addCard(Card("3c"))
+        h.addCard(Card("kd"))
+        h.addCard(Card("8s"))
+        h.reset()
+        self.assertEqual(0, h.score())
+
+    # tests the canGetCard() method of the BlackjackHand class
     def testCanGetCard(self):
-        pass
+        h = BlackjackHand()
+        self.assertTrue(h.canGetCard())
 
+        h.addCard(Card("kh"))
+        self.assertTrue(h.canGetCard())
+
+        h.addCard(Card("qh"))
+        self.assertTrue(h.canGetCard())
+
+        h.addCard(Card("5d"))
+        self.assertFalse(h.canGetCard())
+
+        h.addCard(Card("9d"))
+        self.assertFalse(h.canGetCard())
+
+    # tests the addCard() method of the BlackjackHand class
     def testAddCard(self):
         h = BlackjackHand()
 
         h.addCard(Card("4c"))
-        self.assertEqual(h.score(), 4)
+        self.assertEqual(4, h.score())
 
         h.addCard(Card("9s"))
-        self.assertEqual(h.score(), 13)
+        self.assertEqual(13, h.score())
 
         h.addCard(Card("ac"))
-        self.assertEqual(h.score(), 14)
+        self.assertEqual(14, h.score())
 
         h.addCard(Card("ah"))
-        self.assertEqual(h.score(), 15)
+        self.assertEqual(15, h.score())
 
         h.addCard(Card("6c"))
-        self.assertEqual(h.score(), 21)
+        self.assertEqual(21, h.score())
+
+        h.addCard(Card("6c"))
+        self.assertEqual(27, h.score())
+
+    # tests the score() method of the BlackjackHand class
+    def testScore(self):
+        h = BlackjackHand()
+        self.assertEqual(0, h.score())
+
+        h.addCard(Card("ac"))
+        self.assertEqual(11, h.score())
+
+        h.addCard(Card("7h"))
+        self.assertEqual(18, h.score())
+
+        h.addCard(Card("6c"))
+        self.assertEqual(14, h.score())
+
+        h.addCard(Card("6d"))
+        self.assertEqual(20, h.score())
+
+        h.addCard(Card("ac"))
+        self.assertEqual(21, h.score())
+
+        h.addCard(Card("kc"))
+        self.assertEqual(31, h.score())
+
+    # tests the busted() method of the BlackjackHand class
+    def testBusted(self):
+        h = BlackjackHand()
+        self.assertFalse(h.busted())
+
+        h.addCard(Card("kh"))
+        self.assertFalse(h.busted())
+
+        h.addCard(Card("qh"))
+        self.assertFalse(h.busted())
+
+        h.addCard(Card("5d"))
+        self.assertTrue(h.busted())
 
         h.addCard(Card("9d"))
-        self.assertEqual(h.score(), 30)
+        self.assertTrue(h.busted())
 
-
-    def testScore(self):
-        pass
-
-    def testBusted(self):
-        pass
-
+    # tests the __str__() method of the BlackjackHand class
     def testStr(self):
-        pass
 
+        # if _name is empty and _total is 5, it just returns "5"
+        h = BlackjackHand()
+        h.addCard(Card("5c"))
+        self.assertEqual("5", str(h))
+
+        # if _name is empty and the player has busted, it just returns "busted"
+        h = BlackjackHand()
+        h.addCard(Card("9c"))
+        h.addCard(Card("9c"))
+        h.addCard(Card("9c"))
+        self.assertEqual("busted", str(h))
+
+        # if _name is "Player 1" and _total is 5, it returns "Player 1: 5"
+        h = BlackjackHand("Player 1")
+        h.addCard(Card("5c"))
+        self.assertEqual("Player 1: 5", str(h))
+
+        # if _name is "Player 1" and the player has busted, it returns "Player 1: busted"
+        h = BlackjackHand("Player 1")
+        h.addCard(Card("9c"))
+        h.addCard(Card("9c"))
+        h.addCard(Card("9c"))
+        self.assertEqual("Player 1: busted", str(h))
+
+    # tests the __lt__() method of the BlackjackHand class
     def testLT(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
@@ -88,6 +169,7 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertFalse(h1 < h2)
 
+    # tests the __eq__() method of the BlackjackHand class
     def testEQ(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
@@ -117,6 +199,7 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertTrue(h1 == h2)
 
+    # tests the __ne__() method of the BlackjackHand class
     def testNE(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
@@ -146,6 +229,7 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertFalse(h1 != h2)
 
+    # tests the __le__() method of the BlackjackHand class
     def testLE(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
@@ -175,6 +259,7 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertTrue(h1 <= h2)
 
+    # tests the __gt__() method of the BlackjackHand class
     def testGT(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
@@ -204,6 +289,7 @@ class BlackjackHandTest(unittest.TestCase):
         h2.addCard(Card("kc"))
         self.assertFalse(h1 > h2)
 
+    # tests the __ ge__() method of the BlackjackHand class
     def testGE(self):
         h1 = BlackjackHand()
         h2 = BlackjackHand()
