@@ -7,19 +7,14 @@ from typing import List
 
 
 class HandUI(BlackjackHand):
-
     # stores the window
     _win: GraphWin
-
-    # stores a list of the card objects in the hand
-    _cards: List[Card]
 
     # stores a list of the image objects currently being drawn in the window
     _drawnCards: List[Image]
 
     # the text object which will display the player name & score
     _label: Text
-
 
     def __init__(self, win: GraphWin, name: str = "", stayValue: int = 21):
         """
@@ -29,34 +24,43 @@ class HandUI(BlackjackHand):
         """
         pass
 
-    def drawHand(self, point: Point) -> None:
+    def drawCard(self, card: Card, point: Point) -> None:
         """
+        draws the card and also adds it to the _drawnCards list.
+        :param card: the card object to be drawn
+        :param point: the point at which to draw the card
+        :return: None
 
-        :param point: the point at which to draw the hand
-        :return:
+        pre: already have called addCard with the cardObject so that it is also in the hand
         """
         pass
 
-    # draws the label
     def drawLabel(self, point: Point) -> None:
         """
-
+        draws the label
         :param point: the point at which to draw the label
         :return: None
         """
         pass
 
-    def addCard(self, card: Card) -> None:
+    def undrawCard(self, pos: int) -> None:
         """
-        the same as blackjackHand's addCard except also stores the card object in the _cards instance variable
-        :param card:
+        undraws a card from _drawnCards
+        :param pos: the position of the image in the _drawnCards list (first card added is 0)
+        :return:
+        """
+        pass
+
+    def undrawLabel(self) -> None:
+        """
+        undraws the label
         :return: None
         """
         pass
 
     def reset(self) -> None:
         """
-        the same as blackjackHand's reset except also undraws the card objects, removes them from _cards, and resets the score in the label
+        the same as blackjackHand's reset except also undraws all the card objects, removes them from _cards, and resets the score in the label
         :return: None
         """
         pass
