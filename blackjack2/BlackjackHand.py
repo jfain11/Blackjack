@@ -1,9 +1,15 @@
+#!/usr/bin/env python3
+
+# ----------------------------------------------------------------------
+# BlackjackHand.py
 # Jacob Fain
-# CS261
+# 04/10/2022
+# ----------------------------------------------------------------------
 
 from __future__ import annotations
+
 from Card import Card
-from typing import List
+
 
 class BlackjackHand:
 
@@ -13,8 +19,11 @@ class BlackjackHand:
     # value at which the hand stops getting cards
     _stayValue: int
 
-    # list of cards
-    _cards: List[Card]
+    # total value of the hand
+    _total: int
+
+    # True if the hand has an ace counted as 11
+    _hasAce11: bool
 
     # ------------------------------------------------------------------
 
@@ -23,25 +32,24 @@ class BlackjackHand:
         :param name: a name for the hand
         :param stayValue: values below stayValue have canGetCard return True
         """
-        # initializes the instance variables
         self._name = name
         self._stayValue = stayValue
-        self._cards = []
+        self._total = 0
+        self._hasAce11 = False
 
     def reset(self) -> None:
         """
         resets state to an empty hand
         :return: None
         """
-        # sets _cards to an empty list
-        self._cards = []
+        self._total = 0
+        self._hasAce11 = False
 
     def canGetCard(self) -> bool:
         """
         :return: True if total < the stay value, False otherwise
         """
-        # if score is less than stay value returns True
-        return self.score() < self._stayValue
+        return self._total < self._stayValue
 
     def addCard(self, card: Card) -> None:
         """
@@ -49,50 +57,34 @@ class BlackjackHand:
         :param card: Card to add
         :return: None
         """
-        # appends the new card onto the end of _cards
-        self._cards.append(card)
+        value = card.blackjackValue()
+        # handle Ace as 1 or 11
+        if value == 11:
+            # if already have over 10, this card should be counted as 1 to avoid busting
+            if self._total > 10:
+                value = 1
+            # we have an ace that is counted as 11
+            else:
+                self._hasAce11 = True
+
+        # if adding this card would bust and we have an ace as 11
+        if self._total + value > 21 and self._hasAce11:
+            self._total += value - 10
+            self._hasAce11 = False
+        else:
+            self._total += value
 
     def score(self) -> int:
         """
         :return: total value of the hand
         """
-        # initializes accumulators
-        aceCount = 0
-        score = 0
-
-        # loops through the hand and totals the score
-        # counts the number of aces in the hand
-        for c in self._cards:
-            value = c.blackjackValue()
-
-            # counts the aces in the hand
-            if value == 11:
-                aceCount += 1
-
-            # totals the score of all the cards
-            score += value
-
-        # adjusts the score of the aces if the score is greater than 21
-        if score > 21:
-            for i in range(aceCount):
-                score -= 10
-                if score < 22:
-                    break
-
-        # returns the total blackjack score of the hand
-        return score
+        return self._total
 
     def busted(self) -> bool:
         """
         :return: True if hand total > 21, False otherwise
         """
-        # if score is greater than 21 then return True
-        if self.score() > 21:
-            return True
-        return False
-
-    # ------------------------------------------------------------------
-    # overloaded operators
+        return self._total > 21
 
     def __str__(self) -> str:
         """
@@ -106,80 +98,69 @@ class BlackjackHand:
         if _name is "Player 1" and the player has busted, it returns "Player 1: busted"
         :return: string as described above
         """
+        name = self._name.strip()
+        if name != "":
+            name = name + ":"
 
-        if self._name == "":
-
-            # if busted with no name
-            if self.busted():
-                return "busted"
-            # if not busted with no name
-            else:
-                return str(self.score())
-
+        if self._total > 21:
+            return f"{name} busted".strip()
         else:
-            # if busted with a name
-            if self.busted():
-                return f"{self._name}: busted"
-            # if not busted with a name
-            else:
-                return f"{self._name}: {self.score()}"
+            return f"{name} {self._total}".strip()
+
+    # ------------------------------------------------------------------
 
     def __lt__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if other beats self, otherwise False
         """
-        if self == other:
+        if self.busted() and other.busted():
+            return False
+        elif other.busted():
             return False
         elif self.busted():
             return True
-        return self.score() < other.score()
+        return self._total < other._total
 
     def __eq__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if both hands the same (a tie), False otherwise
         """
+        if self.busted() and other.busted():
+            return True
         if self.busted() or other.busted():
-            return self.busted() and other.busted()
-
-        return self.score() == other.score()
+            return False
+        else:
+            return self._total == other._total
 
     def __ne__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if one hand beats the other, False otherwise
         """
-        if self == other:
-            return False
-        else:
-            return True
+        return not self == other
 
     def __le__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if other beats self or a tie, False otherwise
         """
-        if self == other:
-            return True
-        return self < other
+        return self < other or self == other
 
     def __gt__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if self beats other, False otherwise
         """
-
-        return other < self
+        return not self <= other
 
     def __ge__(self, other: BlackjackHand) -> bool:
         """
         :param other: BlackjackHand to compare
         :return: True if self beats other or a tie, False otherwise
         """
-        if self == other:
-            return True
-        return self > other
+        return not self < other
 
 # ----------------------------------------------------------------------
 
